@@ -14,4 +14,10 @@ class Controller_Pages extends Controller_Base {
     $this->template->content = View::forge('pages/about');
   }
 
+  public function action_contact()
+  {
+    $this->template->title = 'Pages &raquo; Contact';
+    $this->template->content = View::forge('pages/contact');
+  }
+
 }
