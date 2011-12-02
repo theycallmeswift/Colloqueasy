@@ -8,6 +8,31 @@ body {
   background-position: initial initial; 
   background-repeat: initial initial; 
 }
+
+.well {
+  background: #fff;
+}
+
+.profile .well {
+  min-height: 500px;
+}
+
+.profile .sidebar hr {
+  margin: 5px 0 10px;
+}
+
+.profile .sidebar .btn {
+  width: 175px;
+}
+
+.tabs .active > a, .tabs .active > a:hover {
+  background: #f5f5f5;
+}
+
+.right-aligned {
+  text-align: right;
+}
+
 /*
  * Bottom bar
  */
