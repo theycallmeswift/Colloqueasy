@@ -26,6 +26,16 @@ class Controller_Students extends Controller_Base
   {
     $data['student'] = Student::find_one_by_id($id);
 
+    if(!$data['student'])
+    {
+      throw new HttpNotFoundException;
+    }
+
+    if(self::is_owner($id))
+    {
+      $this->template->set_global('owns_profile', true);
+    }
+
     $this->template->title = "Student";
     $this->template->content = View::forge('students/view', $data, false);
   }
@@ -38,6 +48,11 @@ class Controller_Students extends Controller_Base
    */
   public function action_create($id = null)
   {
+    if(self::is_logged_in())
+    {
+      Response::redirect("students/edit/$id");
+    }
+
     $val = Validation::forge();
 
     $val->add('first_name', 'First name')->add_rule('required');
@@ -76,6 +91,8 @@ class Controller_Students extends Controller_Base
    */
   public function action_edit($id = null)
   {
+    self::owner_only($id);
+
     $student = Student::find_one_by_id($id);
 
     if ($student)
@@ -126,6 +143,8 @@ class Controller_Students extends Controller_Base
    */
   public function action_delete($id = null)
   {
+    self::owner_only($id);
+
     if ($student = Student::find_one_by_id($id))
     {
       if(Student::delete_one_by_id($id) == 1)
@@ -144,4 +163,5 @@ class Controller_Students extends Controller_Base
 
     Response::redirect('students');
   }
+
 }

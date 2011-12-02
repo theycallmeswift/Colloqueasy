@@ -7,11 +7,13 @@
       </a>
       <h6>Menu</h6>
       <hr />
-      <?php echo Html::anchor('#', "Add $student->first_name as a Friend", array('class' => 'btn large success')); ?>
-      <?php echo Html::anchor('#', "Send $student->first_name a Message", array('class' => 'btn large info')); ?>
-      <?php echo Html::anchor('students/edit/'.$student->id, 'Edit your Profile', array('class' => 'btn large')); ?>
-      <?php echo Html::anchor('students/delete/'.$student->id, 'Delete your Profile', array('class' => 'btn large danger','onclick' => "return confirm('Are you sure?')")); ?>
-
+      <?php if(!$owns_profile) { ?>
+        <?php echo Html::anchor('#', "Add $student->first_name as a Friend", array('class' => 'btn large success')); ?>
+        <?php echo Html::anchor('#', "Send $student->first_name a Message", array('class' => 'btn large info')); ?>
+      <?php } else { ?>
+        <?php echo Html::anchor('students/edit/'.$student->id, 'Edit your Profile', array('class' => 'btn large')); ?>
+        <?php echo Html::anchor('students/delete/'.$student->id, 'Delete your Profile', array('class' => 'btn large danger','onclick' => "return confirm('Are you sure?')")); ?>
+      <?php } ?>
     </div>
   </div>
   <div class="span10 main">
