@@ -13,5 +13,6 @@ nbproject/
 .idea
 logs/*
 *.swp
+fuel/packages/social/config/facebook.php
 
 /fuel/app/config/crypt.php
