@@ -48,6 +48,14 @@ class Controller_Students extends Controller_Base
    */
   public function action_create($id = null)
   {
+    self::ensure_logged_in_with_facebook_only();
+    try {
+      // Proceed knowing you have a logged in user who's authenticated.
+      $student = (object) \Social\Facebook::instance()->api('/me');
+    } catch (FacebookApiException $e) {
+      $student = false;
+    }
+
     if(self::is_logged_in())
     {
       Response::redirect("students/edit/$id");
@@ -63,6 +71,7 @@ class Controller_Students extends Controller_Base
     if ($val->run())
     {
         $student = Student::create_from_array(array(
+          'facebook_id' => \Social\Facebook::instance()->getUser(),
           'first_name' => Input::post('first_name'),
           'last_name' => Input::post('last_name'),
           'email' => Input::post('email'),
@@ -79,6 +88,7 @@ class Controller_Students extends Controller_Base
       Session::set_flash('error', $errors);
     }
 
+    $this->template->set_global('student', $student, false);
     $this->template->title = "Students";
     $this->template->content = View::forge('students/create');
   }
@@ -91,7 +101,7 @@ class Controller_Students extends Controller_Base
    */
   public function action_edit($id = null)
   {
-    self::owner_only($id);
+    self::ensure_owner_only($id);
 
     $student = Student::find_one_by_id($id);
 
@@ -143,7 +153,7 @@ class Controller_Students extends Controller_Base
    */
   public function action_delete($id = null)
   {
-    self::owner_only($id);
+    self::ensure_owner_only($id);
 
     if ($student = Student::find_one_by_id($id))
     {

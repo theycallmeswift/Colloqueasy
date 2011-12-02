@@ -16,8 +16,27 @@ class Controller_Base extends Controller_Template {
     // Add the custom css
     Asset::css('custom.css', array(), 'custom_styles');
 
+
     // Load the shared layout files
-    $this->template->header = View::forge('shared/header/default');
+    $header_data = array();
+
+    if(self::is_logged_in())
+    {
+      $header_partial = 'shared/header/default';
+      $header_data['fb_login_url'] = \Social\Facebook::instance()->getLogoutUrl();
+      //\Social\Facebook::instance()->destroySession();
+    }
+    else
+    {
+      $fb_permissions = array(
+        'scope' => 'email'
+      );
+
+      $header_partial = 'shared/header/default';
+      $header_data['fb_login_url'] = \Social\Facebook::instance()->getLoginUrl($fb_permissions);
+    }
+
+    $this->template->header = View::forge($header_partial, $header_data);
     $this->template->flash  = View::forge('shared/flash');
     $this->template->footer = View::forge('shared/footer/default');
 
@@ -45,13 +64,36 @@ class Controller_Base extends Controller_Template {
 
   private function authorize()
   {
-    $this->template->set_global('logged_in', self::is_logged_in());
+    $logged_in = self::is_logged_in();
+    $this->template->set_global('logged_in', $logged_in);
     $this->template->set_global('owns_profile', false);
+
+    // If the user isn't logged in but they are authorized with
+    // facebook, then they need to create an account.
+    if (!$logged_in && self::is_logged_in_with_facebook() && Uri::string() != "students/create")
+    {
+      Response::redirect("students/create");
+    }
   }
 
   public function is_logged_in()
   {
-    return true;
+    // Check if the user is logged in with Facebook
+    $facebook_id = \Social\Facebook::instance()->getUser();
+    if($facebook_id)
+    {
+      $user = \Model\Student::find_one_by_facebook_id($facebook_id);
+    }
+    else
+    {
+      $user = false;
+    }
+    return $user ? true : false;
+  }
+
+  public function is_logged_in_with_facebook()
+  {
+    return \Social\Facebook::instance()->getUser() ? true : false;
   }
 
   public function is_owner($id = 0)
@@ -59,7 +101,7 @@ class Controller_Base extends Controller_Template {
     return self::is_logged_in() && true;
   }
 
-  public function owner_only($id = 0)
+  public function ensure_owner_only($id = 0)
   {
     if(!self::is_owner($id))
     {
@@ -67,6 +109,15 @@ class Controller_Base extends Controller_Template {
         Response::redirect('students');
     }
     $this->template->set_global('owns_profile', true);
+  }
+
+  public function ensure_logged_in_with_facebook_only()
+  {
+    if(!self::is_logged_in_with_facebook())
+    {
+      $fb_login_url = \Social\Facebook::instance()->getLoginUrl();
+      Response::redirect($fb_login_url);
+    }
   }
 
   public function logged_in_only()

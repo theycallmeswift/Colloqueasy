@@ -37,6 +37,24 @@ class Student
   }
 
   /**
+   * find_one_by_facebook_id()
+   *
+   * Finds the student with the supplied facebook ID or returns false
+   *
+   * SELECT * FROM `students` WHERE `facebook_id` = '1234' LIMIT 1
+   */
+  public static function find_one_by_facebook_id($id = null)
+  {
+    $id = \DB::escape($id);
+    $result = \DB::query("SELECT * FROM `students` WHERE `facebook_id` = $id LIMIT 1")->as_object()->execute();
+    if (count($result) != 1)
+    {
+      return false;
+    }
+    return $result[0];
+  }
+
+  /**
    * create_from_array()
    *
    * Takes in an array of keys and values. Generates an INSERT

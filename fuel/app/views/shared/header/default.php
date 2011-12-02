@@ -3,8 +3,7 @@
     <div class="container">
       <a class="brand" href="/">Colloqueasy</a>
       <ul class="nav secondary-nav">
-        <li><?php echo Html::anchor("sign_in", "Sign in"); ?></li>
-        <li><?php echo Html::anchor("register", "Register"); ?></li>
+        <li><?php echo Html::anchor($fb_login_url, Asset::img("fb-login-button.png")); ?></li>
       </ul>
     </div>
   </div>
