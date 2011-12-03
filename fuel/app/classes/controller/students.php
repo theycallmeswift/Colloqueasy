@@ -14,7 +14,6 @@ class Controller_Students extends Controller_Base
     $data['students'] = Student::find_all();
     $this->template->title = "Students";
     $this->template->content = View::forge('students/index', $data, false);
-
   }
 
   /**
@@ -48,17 +47,19 @@ class Controller_Students extends Controller_Base
    */
   public function action_create($id = null)
   {
+    if(self::is_logged_in())
+    {
+      $id = self::current_user()->id;
+      Response::redirect("students/edit/$id");
+    }
+
     self::ensure_logged_in_with_facebook_only();
     try {
       // Proceed knowing you have a logged in user who's authenticated.
       $student = (object) \Social\Facebook::instance()->api('/me');
+      $this->template->set_global('student', $student, false);
     } catch (FacebookApiException $e) {
-      $student = false;
-    }
-
-    if(self::is_logged_in())
-    {
-      Response::redirect("students/edit/$id");
+      // Don't do anything. Facebook being stupid.
     }
 
     $val = Validation::forge();
@@ -88,7 +89,6 @@ class Controller_Students extends Controller_Base
       Session::set_flash('error', $errors);
     }
 
-    $this->template->set_global('student', $student, false);
     $this->template->title = "Students";
     $this->template->content = View::forge('students/create');
   }
@@ -171,7 +171,7 @@ class Controller_Students extends Controller_Base
       throw new HttpNotFoundException;
     }
 
-    Response::redirect('students');
+    Response::redirect('logout');
   }
 
 }

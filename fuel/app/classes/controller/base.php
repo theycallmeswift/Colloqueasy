@@ -16,15 +16,15 @@ class Controller_Base extends Controller_Template {
     // Add the custom css
     Asset::css('custom.css', array(), 'custom_styles');
 
+    // Authorize the user
+    self::authorize();
 
     // Load the shared layout files
     $header_data = array();
 
     if(self::is_logged_in())
     {
-      $header_partial = 'shared/header/default';
-      $header_data['fb_login_url'] = \Social\Facebook::instance()->getLogoutUrl();
-      //\Social\Facebook::instance()->destroySession();
+      $header_partial = 'shared/header/member';
     }
     else
     {
@@ -40,8 +40,13 @@ class Controller_Base extends Controller_Template {
     $this->template->flash  = View::forge('shared/flash');
     $this->template->footer = View::forge('shared/footer/default');
 
-    // Authorize the user
-    self::authorize();
+  }
+
+  public function action_logout()
+  {
+    \Social\Facebook::instance()->destroySession();
+    Session::destroy();
+    Response::redirect("/");
   }
 
   private function add_bootstrap_assets()
@@ -64,8 +69,20 @@ class Controller_Base extends Controller_Template {
 
   private function authorize()
   {
+    // Check if the user is logged in with facebook
+    $facebook_id = \Social\Facebook::instance()->getUser();
+    if($facebook_id)
+    {
+      $user = \Model\Student::find_one_by_facebook_id($facebook_id);
+      if($user)
+      {
+        Session::set('userid', $user->id);
+      }
+    }
+
     $logged_in = self::is_logged_in();
     $this->template->set_global('logged_in', $logged_in);
+    $this->template->set_global('current_user', self::current_user());
     $this->template->set_global('owns_profile', false);
 
     // If the user isn't logged in but they are authorized with
@@ -76,19 +93,24 @@ class Controller_Base extends Controller_Template {
     }
   }
 
+  /**
+   * Public helpers
+   */
+
+  public function current_user()
+  {
+    $user_id = Session::get('userid', false);
+    if($user_id)
+    {
+      return \Model\Student::find_one_by_id($user_id);
+    }
+    return false;
+  }
+
   public function is_logged_in()
   {
-    // Check if the user is logged in with Facebook
-    $facebook_id = \Social\Facebook::instance()->getUser();
-    if($facebook_id)
-    {
-      $user = \Model\Student::find_one_by_facebook_id($facebook_id);
-    }
-    else
-    {
-      $user = false;
-    }
-    return $user ? true : false;
+    $user_id = Session::get('userid', false);
+    return $user_id ? true : false;
   }
 
   public function is_logged_in_with_facebook()
@@ -98,8 +120,12 @@ class Controller_Base extends Controller_Template {
 
   public function is_owner($id = 0)
   {
-    return self::is_logged_in() && true;
+    return self::is_logged_in() && self::current_user()->id == $id;
   }
+
+  /**
+   * Before filters
+   */
 
   public function ensure_owner_only($id = 0)
   {
@@ -120,7 +146,7 @@ class Controller_Base extends Controller_Template {
     }
   }
 
-  public function logged_in_only()
+  public function ensure_logged_in_only()
   {
     if(!self::is_logged_in())
     {

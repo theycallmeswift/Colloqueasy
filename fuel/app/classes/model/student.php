@@ -31,7 +31,7 @@ class Student
     $result = \DB::query("SELECT * FROM `students` WHERE `id` = $id LIMIT 1")->as_object()->execute();
     if (count($result) != 1)
     {
-      throw new \HttpNotFoundException;
+      return false;
     }
     return $result[0];
   }
