@@ -13,6 +13,14 @@ body {
   background: #fff;
 }
 
+.fright {
+  float: right;
+}
+
+.fleft {
+  float: left;
+}
+
 .profile .well {
   min-height: 500px;
 }
