@@ -24,6 +24,8 @@ class Controller_Base extends Controller_Template {
 
     if(self::is_logged_in())
     {
+      $uid = Session::get('userid', false);
+      $header_data['unread_count'] = \Model\Message::unread_messages_count($uid);
       $header_partial = 'shared/header/member';
     }
     else

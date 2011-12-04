@@ -35,6 +35,21 @@ class Message
   }
 
   /**
+   * unread_messages_count()
+   *
+   * Finds the count of unread messages for a given user
+   * the user with the supplied id is the sender
+   *
+   * SELECT COUNT(*) FROM `messages` WHERE receiver_id = '1234' && has_read = '0'
+   */
+  public static function unread_messages_count($id = 0)
+  {
+    $id = \DB::escape($id);
+    $result = \DB::query("SELECT COUNT(*) AS total FROM `messages` WHERE receiver_id = $id && has_read = '0'")->as_object()->execute();
+    return (int) $result[0]->total;
+  }
+
+  /**
    * mark_as_read()
    *
    * Marks the message with the given id as read.
