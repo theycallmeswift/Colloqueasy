@@ -21,7 +21,10 @@
                             ));
     ?>
   </p>
-
+  <p>
+    <?php echo Form::label('Bio', 'bio'); ?>
+    <?php echo Form::textarea('bio', Input::post('bio', isset($bio) ? $bio: '')); ?>
+  </p>
   <div class="actions">
     <?php echo Form::submit(); ?>
  </div>

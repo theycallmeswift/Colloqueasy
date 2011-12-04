@@ -35,6 +35,11 @@ class Controller_Students extends Controller_Base
       $this->template->set_global('owns_profile', true);
     }
 
+    $current_student = self::current_user();
+    $data['are_friends'] = Student::are_friends($current_student->id, $data['student']->id);
+
+    $data['friends'] = Student::get_friends($id);
+
     $this->template->title = "Student";
     $this->template->content = View::forge('students/view', $data, false);
   }
@@ -78,6 +83,7 @@ class Controller_Students extends Controller_Base
           'email' => Input::post('email'),
           'gender' => Input::post('gender'),
           'created_at' => Date::forge()->get_timestamp(),
+          'bio' => Input::post('bio'),
         ));
 
         Session::set_flash('success', 'Created student #' . $student->id);
@@ -89,6 +95,7 @@ class Controller_Students extends Controller_Base
       Session::set_flash('error', $errors);
     }
 
+    $this->template->set_global('bio', Input::post("bio", ""), false);
     $this->template->title = "Students";
     $this->template->content = View::forge('students/create');
   }
@@ -123,6 +130,7 @@ class Controller_Students extends Controller_Base
           'email' => Input::post('email'),
           'gender' => Input::post('gender'),
           'updated_at' => Date::forge()->get_timestamp(),
+          'bio' => Input::post('bio'),
         ));
 
         Session::set_flash('success', 'Updated student #' . $id);
@@ -141,6 +149,7 @@ class Controller_Students extends Controller_Base
     }
 
     $this->template->set_global('student', $student, false);
+    $this->template->set_global('bio', $student->bio, false);
     $this->template->title = "Students";
     $this->template->content = View::forge('students/edit');
   }
@@ -172,6 +181,61 @@ class Controller_Students extends Controller_Base
     }
 
     Response::redirect('logout');
+  }
+
+
+  /**
+   * Add Friend Action
+   *
+   * Handles adding a friendship
+   */
+  public function action_add_friend($id = 0)
+  {
+    self::ensure_logged_in_only();
+    $current_student = self::current_user();
+    $target_student = Student::find_one_by_id($id);
+    if(!$target_student)
+    {
+      throw new HttpNotFoundException;
+    }
+
+    if(!Student::are_friends($current_student->id, $target_student->id))
+    {
+      Student::add_friendship($current_student->id, $target_student->id);
+      Session::set_flash('success', "You are now friends with $target_student->first_name!");
+    }
+    else
+    {
+        Session::set_flash('error', 'You are already friends with that student');
+    }
+    Response::redirect('students');
+  }
+
+  /**
+   * Remove Friend Action
+   *
+   * Handles removinging a friendship
+   */
+  public function action_remove_friend($id = 0)
+  {
+    self::ensure_logged_in_only();
+    $current_student = self::current_user();
+    $target_student = Student::find_one_by_id($id);
+    if(!$target_student)
+    {
+      throw new HttpNotFoundException;
+    }
+
+    if(Student::are_friends($current_student->id, $target_student->id))
+    {
+      Student::remove_friendship($current_student->id, $target_student->id);
+      Session::set_flash('success', "You are now NOT friends with $target_student->first_name!");
+    }
+    else
+    {
+        Session::set_flash('error', 'You are not already friends with that student');
+    }
+    Response::redirect('students');
   }
 
 }

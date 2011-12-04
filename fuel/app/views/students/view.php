@@ -8,8 +8,12 @@
       <h6>Menu</h6>
       <hr />
       <?php if(!$owns_profile) { ?>
-        <?php echo Html::anchor('#', "Add $student->first_name as a Friend", array('class' => 'btn large success')); ?>
-        <?php echo Html::anchor('#', "Send $student->first_name a Message", array('class' => 'btn large info')); ?>
+        <?php if($are_friends) { ?>
+          <?php echo Html::anchor("students/remove_friend/$student->id", "Remove $student->first_name as a Friend", array('class' => 'btn large error')); ?>
+        <?php } else { ?>
+          <?php echo Html::anchor("students/add_friend/$student->id", "Add $student->first_name as a Friend", array('class' => 'btn large success')); ?>
+        <?php } ?>
+        <?php echo Html::anchor("messages/create?receiver_id=$student->id", "Send $student->first_name a Message", array('class' => 'btn large info')); ?>
       <?php } else { ?>
         <?php echo Html::anchor('students/edit/'.$student->id, 'Edit your Profile', array('class' => 'btn large')); ?>
         <?php echo Html::anchor('students/delete/'.$student->id, 'Delete your Profile', array('class' => 'btn large danger','onclick' => "return confirm('Are you sure?')")); ?>
@@ -32,12 +36,12 @@
             <li><strong>In a Relationship with:</strong> <a href="#">Jane Doe</a></li>
           </ul>
           <strong>Bio:</strong>
-          <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+          <p><?php echo $student->bio ?></p>
 
-          <h4><?php echo $student->first_name ?> has 288 friends:</h4>
+          <h4><?php echo $student->first_name ?> has <?php echo count($friends); ?> friends:</h4>
           <div class="media-grid">
-            <?php for($i = 0; $i < 32; $i++) { ?>
-              <a href="#"><img class="thumbnail" src="http://www.gravatar.com/avatar/<?php echo md5(strtolower($student->email)); ?>?s=40" /></a>
+            <?php foreach($friends as $friend) { ?>
+              <?php echo Html::anchor("/students/view/$friend->id", "<img class='thumbnail' src='http://www.gravatar.com/avatar/". md5(strtolower($friend->email))."?s=40' />"); ?>
             <?php } ?>
           </div>
           <p class="right-aligned"><a href="#">View All</a></p>
@@ -57,5 +61,3 @@
 </div>
 
 <?php echo Html::anchor('students', 'Back'); ?>
-
-<?php var_dump($student); ?>

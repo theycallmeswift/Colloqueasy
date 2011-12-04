@@ -117,5 +117,71 @@ class Student
     return $result;
   }
 
+  /**
+   * get_friends()
+   *
+   * Returns the friends for a given user
+   *
+   * SELECT * FROM friends
+   * LEFT JOIN students ON friends.friend_id = students.id 
+   * WHERE friends.student_id = '123'
+   */
+  public static function get_friends($id = 0)
+  {
+    $id = \DB::escape($id);
+    return \DB::query("SELECT * FROM friends
+      LEFT JOIN students ON friends.friend_id = students.id 
+      WHERE friends.student_id = $id")->as_object()->execute();
 
+  }
+
+  /**
+   * are_friends()
+   *
+   * Returns true if two users are friends, otherwise false
+   *
+   * SELECT COUNT(*) FROM `friends` WHERE `student_id` = '1234' AND `friend_id` = '5678'
+   */
+  public static function are_friends($id = 0, $friend_id = 0)
+  {
+    $id = \DB::escape($id);
+    $friend_id = \DB::escape($friend_id);
+
+    $result = \DB::query("SELECT COUNT(*) as count FROM `friends` WHERE `student_id` = $id AND `friend_id` = $friend_id")->as_object()->execute();
+    if ($result[0]->count != 1)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * add_friendship()
+   *
+   * Creates a friendship between two users
+   *
+   * INSERT INTO `friends` (student_id, friend_id) VALUES ('1234, '5678')
+   */
+  public static function add_friendship($id = 0, $friend_id = 0)
+  {
+    $id = \DB::escape($id);
+    $friend_id = \DB::escape($friend_id);
+
+    return \DB::query("INSERT INTO `friends` (student_id, friend_id) VALUES ($id, $friend_id)")->execute();
+  }
+
+  /**
+   * remove_friendship()
+   *
+   * Deletes a friendship between two users
+   *
+   * DELETE FROM `friends` WHERE `student_id` = '1234' AND `friend_id` = '5678' LIMIT 1
+   */
+  public static function remove_friendship($id = 0, $friend_id = 0)
+  {
+    $id = \DB::escape($id);
+    $friend_id = \DB::escape($friend_id);
+
+    return \DB::query("DELETE FROM `friends` WHERE `student_id` = $id AND `friend_id` = $friend_id LIMIT 1")->execute();
+  }
 }

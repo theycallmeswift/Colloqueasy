@@ -1,7 +1,13 @@
-<h2 class="first">Editing Student</h2>
+<div class="well">
+  <h2 class="first">Edit your Profile</h2>
 
-<?php echo render('students/_form'); ?>
-<br />
+      <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="basic">
+          <?php echo render('students/_form'); ?>
+        </div>
+      </div>
+</div>
 <p>
-<?php echo Html::anchor('students/view/'.$student->id, 'View'); ?> |
-<?php echo Html::anchor('students', 'Back'); ?></p>
+  <?php echo Html::anchor('students/view/'.$student->id, 'View'); ?> |
+  <?php echo Html::anchor('students', 'Back'); ?>
+</p>
