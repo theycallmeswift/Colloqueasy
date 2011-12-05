@@ -47,7 +47,12 @@
           <p class="right-aligned"><a href="#">View All</a></p>
         </div>
         <div class="tab-pane" id="education">
-          <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+          <?php foreach($schools as $school) { ?>
+          <h4><?php echo $school->name; ?> <small><?php echo "$school->city, $school->state"; ?></small></h4>
+            <p>Between <span class="label"><?php echo Date::create_from_string($school->start_date, 'mysql-date')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($school->end_date, 'mysql-date')->format("%B, %Y"); ?></span></p>
+            <p><?php echo $student->first_name ?> earned a <?php echo $school->degree; ?> in <?php echo $school->major; ?></p>
+            <hr />
+          <?php } ?>
         </div>
         <div class="tab-pane" id="work">
           <p>Banksy do proident, brooklyn photo booth delectus sunt artisan sed organic exercitation eiusmod four loko. Quis tattooed iphone esse aliqua. Master cleanse vero fixie mcsweeney's. Ethical portland aute, irony food truck pitchfork lomo eu anim. Aesthetic blog DIY, ethical beard leggings tofu consequat whatever cardigan nostrud. Helvetica you probably haven't heard of them carles, marfa veniam occaecat lomo before they sold out in shoreditch scenester sustainable thundercats. Consectetur tofu craft beer, mollit brunch fap echo park pitchfork mustache dolor.</p>
