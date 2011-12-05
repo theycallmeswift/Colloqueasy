@@ -5,8 +5,8 @@
     <div class="span9">
       <?php if ($education) { ?>
         <h3>You attended <?php echo $school->name; ?></h3><br />
-        <strong>Start Date: </strong><?php echo Date::create_from_string($education->start_date, 'mysql-date')->format("%B, %Y"); ?><br />
-        <strong>End Date: </strong><?php echo Date::create_from_string($education->end_date, 'mysql-date')->format("%B, %Y"); ?><br />
+        <strong>Start Date: </strong><?php echo Date::create_from_string($education->start_date, '%Y-%m-%d')->format("%B, %Y"); ?><br />
+        <strong>End Date: </strong><?php echo Date::create_from_string($education->end_date, '%Y-%m-%d')->format("%B, %Y"); ?><br />
         <strong>Major: </strong><?php echo $education->major; ?><br />
         <strong>Degree: </strong><?php echo $education->degree; ?><br />
 

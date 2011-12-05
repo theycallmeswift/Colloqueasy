@@ -49,7 +49,7 @@
         <div class="tab-pane" id="education">
           <?php foreach($schools as $school) { ?>
           <h4><?php echo Html::anchor("schools/view/$school->id", $school->name); ?> <small><?php echo "$school->city, $school->state"; ?></small></h4>
-            <p>Between <span class="label"><?php echo Date::create_from_string($school->start_date, 'mysql-date')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($school->end_date, 'mysql-date')->format("%B, %Y"); ?></span></p>
+            <p>Between <span class="label"><?php echo Date::create_from_string($school->start_date, '%Y-%m-%d')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($school->end_date, '%Y-%m-%d')->format("%B, %Y"); ?></span></p>
             <p><?php echo $student->first_name ?> earned a <?php echo $school->degree; ?> in <?php echo $school->major; ?></p>
             <hr />
           <?php } ?>
