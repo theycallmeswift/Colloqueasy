@@ -20,5 +20,5 @@
   submodulepath = fuel/packages/email
   submoduleurl = git://github.com/fuel/email.git
 [submodule "fuel/app/vendor/Facebook"]
-  submodulepath = fuel/app/vendor/Facebook
-  submoduleurl = git://github.com/facebook/php-sdk.git
+	path = fuel/app/vendor/Facebook
+	url = git://github.com/facebook/php-sdk.git
