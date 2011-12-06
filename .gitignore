@@ -13,4 +13,5 @@ nbproject/
 .idea
 logs/*
 *.swp
+*.swo
 fuel/packages/social/config/facebook.php

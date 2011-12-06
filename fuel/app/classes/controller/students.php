@@ -11,7 +11,7 @@ class Controller_Students extends Controller_Base
    */
   public function action_index()
   {
-    $data['students'] = Student::find_all();
+    $data['students'] = Student::get_profile_summaries();
     $this->template->title = "Students";
     $this->template->content = View::forge('students/index', $data, false);
   }
@@ -37,6 +37,7 @@ class Controller_Students extends Controller_Base
 
     $current_student = self::current_user();
     $data['are_friends'] = Student::are_friends($current_student->id, $data['student']->id);
+    $data['are_in_relationship'] = Student::are_in_relationship($current_student->id, $data['student']->id);
 
     $data['friends'] = Student::get_friends($id);
     $data['schools'] = \Model\School::find_education_for($id);
@@ -235,6 +236,60 @@ class Controller_Students extends Controller_Base
     else
     {
         Session::set_flash('error', 'You are not already friends with that student');
+    }
+    Response::redirect('students');
+  }
+
+  /**
+   * Add Relationship Action
+   *
+   * Handles adding a relationship
+   */
+  public function action_add_relationship($id = 0)
+  {
+    self::ensure_logged_in_only();
+    $current_student = self::current_user();
+    $target_student = Student::find_one_by_id($id);
+    if(!$target_student)
+    {
+      throw new HttpNotFoundException;
+    }
+
+    if(!Student::are_in_relationship($current_student->id, $target_student->id))
+    {
+      Student::add_relationship($current_student->id, $target_student->id);
+      Session::set_flash('success', "You are now in a relationship with $target_student->first_name!");
+    }
+    else
+    {
+        Session::set_flash('error', 'You are already in a relationship with that student');
+    }
+    Response::redirect('students');
+  }
+
+  /**
+   * Remove Relationship Action
+   *
+   * Handles removinging a relationship
+   */
+  public function action_remove_relationship($id = 0)
+  {
+    self::ensure_logged_in_only();
+    $current_student = self::current_user();
+    $target_student = Student::find_one_by_id($id);
+    if(!$target_student)
+    {
+      throw new HttpNotFoundException;
+    }
+
+    if(Student::are_friends($current_student->id, $target_student->id))
+    {
+      Student::remove_relationship($current_student->id, $target_student->id);
+      Session::set_flash('success', "You are now NOT in a relationship with $target_student->first_name!");
+    }
+    else
+    {
+        Session::set_flash('error', 'You are not already in a relationship with that student');
     }
     Response::redirect('students');
   }

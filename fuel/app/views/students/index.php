@@ -1,38 +1,29 @@
-<h2 class="first">Listing Students</h2>
-
-<?php if ($students): ?>
-<table cellspacing="0">
-  <tr>
-    <th>Id</th>
-    <th>First name</th>
-    <th>Last name</th>
-    <th>Email</th>
-    <th>Gender</th>
-    <th>Created at</th>
-    <th>Updated at</th>
-    <th></th>
-  </tr>
-
-  <?php foreach ($students as $student): ?> <tr>
-
-    <td><?php echo $student->id; ?></td>
-    <td><?php echo $student->first_name; ?></td>
-    <td><?php echo $student->last_name; ?></td>
-    <td><?php echo $student->email; ?></td>
-    <td><?php echo $student->gender; ?></td>
-    <td><?php echo $student->created_at; ?></td>
-    <td><?php echo $student->updated_at; ?></td>
-    <td>
-      <?php echo Html::anchor('students/view/'.$student->id, 'View'); ?> |
-      <?php echo Html::anchor('students/edit/'.$student->id, 'Edit'); ?> |
-      <?php echo Html::anchor('students/delete/'.$student->id, 'Delete', array('onclick' => "return confirm('Are you sure?')")); ?>   </td>
-  </tr>
-  <?php endforeach; ?></table>
-
-<?php else: ?>
-<p>No Entries.</p>
-
-<?php endif; ?>
-<br />
-
-<?php echo Html::anchor('students/create', 'Add new Student'); ?>
+<div class="well">
+  <div class="row">
+    <div class="span9">
+      <h2 class="first">All Students</h2>
+    </div>
+    <div class="span6">
+      <p>Don't have a profile?  <?php echo Html::anchor('students/create', 'Create one!', array("class" => "btn large success")); ?></p>
+    </div>
+  </div>
+  <?php if ($students): ?>
+    <hr />
+    <div id="results" class="row">
+      <?php foreach($students as $student) { ?>
+        <div class="span5">
+          <div class="span2 fleft">
+          <?php echo Html::anchor("students/view/$student->id", 
+                "<img src='http://www.gravatar.com/avatar/".md5(strtolower($student->email))."?s=80' alt='$student->first_name\'s Gravatar' class='thumbnail'>"); ?>
+          </div>
+          <div class="span3 fleft">
+            <h4><?php echo Html::anchor("students/view/$student->id", "$student->first_name $student->last_name"); ?> <small><?php echo $student->gender; ?></small></h4>
+            <p><?php echo $student->friend_count; ?> friends</p>
+          </div>
+        </div>
+      <?php } ?>
+    </div>
+  <?php else: ?>
+    <p>No Entries.</p>
+  <?php endif; ?>
+</div>

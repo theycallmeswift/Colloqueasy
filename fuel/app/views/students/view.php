@@ -13,6 +13,11 @@
         <?php } else { ?>
           <?php echo Html::anchor("students/add_friend/$student->id", "Add $student->first_name as a Friend", array('class' => 'btn large success')); ?>
         <?php } ?>
+        <?php if($are_in_relationship) { ?>
+          <?php echo Html::anchor("students/remove_relationship/$student->id", "End relationship", array('class' => 'btn large error')); ?>
+        <?php } else { ?>
+          <?php echo Html::anchor("students/add_relationship/$student->id", "Add relationship with $student->first_name", array('class' => 'btn large success')); ?>
+        <?php } ?>
         <?php echo Html::anchor("messages/create?receiver_id=$student->id", "Send $student->first_name a Message", array('class' => 'btn large info')); ?>
       <?php } else { ?>
         <?php echo Html::anchor('students/edit/'.$student->id, 'Edit your Profile', array('class' => 'btn large')); ?>
@@ -44,7 +49,6 @@
               <?php echo Html::anchor("/students/view/$friend->id", "<img class='thumbnail' src='http://www.gravatar.com/avatar/". md5(strtolower($friend->email))."?s=40' />"); ?>
             <?php } ?>
           </div>
-          <p class="right-aligned"><a href="#">View All</a></p>
         </div>
         <div class="tab-pane" id="education">
           <?php foreach($schools as $school) { ?>

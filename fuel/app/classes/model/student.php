@@ -134,6 +134,34 @@ class Student
       WHERE friends.student_id = $id")->as_object()->execute();
 
   }
+  
+  /**
+   * get_profile_summaries()
+   *
+   * Returns the basic info for a user along with a friends count
+   *
+   * SELECT students.id,
+   * students.email, 
+   * students.first_name,
+   * students.last_name,
+   * students.gender,
+   * COUNT(friends.friend_id) as friend_count
+   * FROM students, friends
+   * WHERE students.id = friends.student_id
+   * GROUP BY friends.student_id
+   */
+  public static function get_profile_summaries()
+  {
+    return \DB::query("SELECT students.id,
+      students.email, 
+      students.first_name,
+      students.last_name,
+      students.gender,
+      COUNT(friends.friend_id) as friend_count
+      FROM students, friends
+      WHERE students.id = friends.student_id
+      GROUP BY friends.student_id")->as_object()->execute();
+  }
 
   /**
    * are_friends()
@@ -183,5 +211,55 @@ class Student
     $friend_id = \DB::escape($friend_id);
 
     return \DB::query("DELETE FROM `friends` WHERE `student_id` = $id AND `friend_id` = $friend_id LIMIT 1")->execute();
+  }
+
+  /**
+   * are_in_relationship()
+   *
+   * Returns true if two users are in a relationship, otherwise false
+   *
+   * SELECT COUNT(*) FROM `relationships` WHERE `initiator_id` = '1234' AND `acceptor_id` = '5678'
+   */
+  public static function are_in_relationship($id = 0, $relation_id= 0)
+  {
+    $id = \DB::escape($id);
+    $relation_id = \DB::escape($relation_id);
+
+    $result = \DB::query("SELECT COUNT(*) as count FROM `relationships` WHERE `initiator_id` = $id AND `acceptor_id` = $relation_id")->as_object()->execute();
+    if ($result[0]->count != 1)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * add_relationship()
+   *
+   * Creates a relationship between two users
+   *
+   * INSERT INTO `relationships` (initiator_id, acceptor_id) VALUES ('1234, '5678')
+   */
+  public static function add_relationship($id = 0, $relation_id = 0)
+  {
+    $id = \DB::escape($id);
+    $relation_id = \DB::escape($relation_id);
+
+    return \DB::query("INSERT INTO `relationships` (initiator_id, acceptor_id) VALUES ($id, $relation_id)")->execute();
+  }
+
+  /**
+   * remove_relationship()
+   *
+   * Deletes a relationship between two users
+   *
+   * DELETE FROM `relationship` WHERE `initiator_id` = '1234' AND `acceptor_id` = '5678' LIMIT 1
+   */
+  public static function remove_relationship($id = 0, $relation_id = 0)
+  {
+    $id = \DB::escape($id);
+    $relation_id = \DB::escape($relation_id);
+
+    return \DB::query("DELETE FROM `relationships` WHERE `initiator_id` = $id AND `acceptor_id` = $relation_id LIMIT 1")->execute();
   }
 }
