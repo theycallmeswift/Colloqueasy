@@ -1,24 +1,21 @@
-[submodule "fuel/core"]
-  submodulepath = fuel/core
-  submoduleurl = git://github.com/fuel/core.git
-[submodule "fuel/packages/orm"]
-  submodulepath = fuel/packages/orm
-  submoduleurl = git://github.com/fuel/orm.git
-[submodule "fuel/packages/auth"]
-  submodulepath = fuel/packages/auth
-  submoduleurl = git://github.com/fuel/auth.git
-[submodule "fuel/packages/oil"]
-  submodulepath = fuel/packages/oil
-  submoduleurl = git://github.com/fuel/oil.git
-[submodule "docs"]
-  submodulepath = docs
-  submoduleurl = git://github.com/fuel/docs.git
-[submodule "fuel/packages/parser"]
-  submodulepath = fuel/packages/parser
-  submoduleurl = git://github.com/fuel/parser.git
-[submodule "fuel/packages/email"]
-  submodulepath = fuel/packages/email
-  submoduleurl = git://github.com/fuel/email.git
 [submodule "fuel/app/vendor/Facebook"]
 	path = fuel/app/vendor/Facebook
 	url = git://github.com/facebook/php-sdk.git
+[submodule "fuel/core"]
+	path = fuel/core
+	url = git://github.com/fuel/core.git
+[submodule "fuel/packages/orm"]
+	path = fuel/packages/orm
+	url = git://github.com/fuel/orm.git
+[submodule "fuel/packages/auth"]
+	path = fuel/packages/auth
+	url = git://github.com/fuel/auth.git
+[submodule "fuel/packages/oil"]
+	path = fuel/packages/oil
+	url = git://github.com/fuel/oil.git
+[submodule "fuel/packages/parser"]
+	path = fuel/packages/parser
+	url = git://github.com/fuel/parser.git
+[submodule "fuel/packages/email"]
+	path = fuel/packages/email
+	url = git://github.com/fuel/email.git

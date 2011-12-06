@@ -21,8 +21,9 @@ class Facebook {
 	private $_facebook = NULL;
 	
 	function __construct()
-	{
-		$config = \Config::load('facebook', true);
+  {
+		$env = \Fuel::$env;
+		$config = \Config::load("$env/facebook", "facebook");
 		
 		$this->_facebook = new \Facebook($config);
 	}
