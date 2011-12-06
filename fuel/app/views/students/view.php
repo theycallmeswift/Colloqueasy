@@ -38,7 +38,9 @@
         <div class="tab-pane active" id="overview">
           <ul class="unstyled">
             <li><strong>Gender:</strong> <?php echo $student->gender; ?></li>
-            <li><strong>In a Relationship with:</strong> <a href="#">Jane Doe</a></li>
+            <?php foreach($relationships as $relationship) { ?>
+              <li><strong>In a Relationship with:</strong> <?php echo Html::anchor("students/view/$relationship->acceptor_id", "$relationship->first_name $relationship->last_name"); ?></li>
+            <?php } ?>
           </ul>
           <strong>Bio:</strong>
           <p><?php echo $student->bio ?></p>

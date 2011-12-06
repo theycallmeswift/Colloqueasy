@@ -40,6 +40,7 @@ class Controller_Students extends Controller_Base
     $data['are_in_relationship'] = Student::are_in_relationship($current_student->id, $data['student']->id);
 
     $data['friends'] = Student::get_friends($id);
+    $data['relationships'] = Student::get_relationships($id);
     $data['schools'] = \Model\School::find_education_for($id);
 
     $this->template->title = "Student";
@@ -255,14 +256,14 @@ class Controller_Students extends Controller_Base
       throw new HttpNotFoundException;
     }
 
-    if(!Student::are_in_relationship($current_student->id, $target_student->id))
+    if(count(Student::get_relationships($current_student->id)) == 0 && !Student::are_in_relationship($current_student->id, $target_student->id))
     {
       Student::add_relationship($current_student->id, $target_student->id);
       Session::set_flash('success', "You are now in a relationship with $target_student->first_name!");
     }
     else
     {
-        Session::set_flash('error', 'You are already in a relationship with that student');
+        Session::set_flash('error', 'You are already in a relationship!');
     }
     Response::redirect('students');
   }

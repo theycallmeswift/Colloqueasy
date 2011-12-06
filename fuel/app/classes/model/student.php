@@ -132,9 +132,8 @@ class Student
     return \DB::query("SELECT * FROM friends
       LEFT JOIN students ON friends.friend_id = students.id 
       WHERE friends.student_id = $id")->as_object()->execute();
-
   }
-  
+
   /**
    * get_profile_summaries()
    *
@@ -261,5 +260,22 @@ class Student
     $relation_id = \DB::escape($relation_id);
 
     return \DB::query("DELETE FROM `relationships` WHERE `initiator_id` = $id AND `acceptor_id` = $relation_id LIMIT 1")->execute();
+  }
+
+  /**
+   * get_relationships()
+   *
+   * Returns the relationships for a given user
+   *
+   * SELECT * FROM relationships
+   * LEFT JOIN students ON relationships.acceptor_id = students.id 
+   * WHERE relationships.initiator_id = '123'
+   */
+  public static function get_relationships($id = 0)
+  {
+    $id = \DB::escape($id);
+    return \DB::query("SELECT * FROM relationships
+      LEFT JOIN students ON relationships.acceptor_id = students.id 
+      WHERE relationships.initiator_id = $id")->as_object()->execute();
   }
 }
