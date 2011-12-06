@@ -18,6 +18,68 @@ class Controller_Schools extends Controller_Base
 
   }
 
+  public function action_search()
+  {
+    $data = array();
+
+    $data['students'] = array();
+    if (Input::get('submit', false))
+    {
+      $friends_only = (Input::get('friends_only', false) === '1') ? true : false;
+      $name = strtolower(Input::get('name', ''));
+      $city = strtolower(Input::get('city', ''));
+      $state = strtolower(Input::get('state', ''));
+      $degree = strtolower(Input::get('degree', ''));
+      $major = strtolower(Input::get('major', ''));
+
+      $query = "SELECT * FROM schools, education, students ";
+
+      if($friends_only)
+      {
+        $query .= "LEFT JOIN friends ON friends.friend_id = students.id ";
+      }
+
+      $query .= "WHERE schools.id = education.school_id AND students.id = education.student_id ";
+
+      if($friends_only)
+      {
+        $uid = self::current_user()->id;
+        $query .= "AND friends.student_id = '$uid' ";
+      }
+
+      if(!empty($name))
+      {
+        $query .= "AND LOWER(schools.name) LIKE ".DB::escape("%$name%")." ";
+      }
+
+      if(!empty($city))
+      {
+        $query .= "AND LOWER(schools.city) LIKE ".DB::escape("%$city%")." ";
+      }
+
+      if(!empty($state))
+      {
+        $query .= "AND LOWER(schools.state) LIKE ".DB::escape("%$state%")." ";
+      }
+
+      if(!empty($degree))
+      {
+        $query .= "AND LOWER(education.degree) LIKE ".DB::escape("%$degree%")." ";
+      }
+
+      if(!empty($major))
+      {
+        $query .= "AND LOWER(education.major) LIKE ".DB::escape("%$major%")." ";
+      }
+
+      $data['students'] = \DB::query($query)->as_object()->execute();
+    }
+
+    $this->template->title = "Schools";
+    $this->template->content = View::forge('schools/search', $data, false);
+
+  }
+
   public function action_view($id = null)
   {
     $data['school'] = School::find_one_by_id($id);
