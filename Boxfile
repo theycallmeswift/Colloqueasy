@@ -1,0 +1,11 @@
+web1:
+  php_extensions:
+      - mysql
+      - curl
+  shared_writable_dirs:
+      - fuel/app/logs
+  document_root: public/
+
+db1:
+  name: colloqueasy
+  type: mysql
