@@ -49,27 +49,97 @@ class Controller_Schools extends Controller_Base
 
       if(!empty($name))
       {
-        $query .= "AND LOWER(schools.name) LIKE ".DB::escape("%$name%")." ";
+        $name = explode(",", $name);
+        if(count($name) > 1)
+        {
+          $query .= "AND (";
+          foreach($name as $key => $value)
+          {
+            if($key != 0) { $query .= "OR "; }
+            $query .= "LOWER(schools.name) LIKE ".DB::escape("%$value%")." ";
+          }
+          $query .= ") ";
+        }
+        else
+        {
+          $query .= "AND LOWER(schools.name) LIKE ".DB::escape("%".$name[0]."%")." ";
+        }
       }
 
       if(!empty($city))
       {
-        $query .= "AND LOWER(schools.city) LIKE ".DB::escape("%$city%")." ";
+        $city = explode(",", $city);
+        if(count($city) > 1)
+        {
+          $query .= "AND (";
+          foreach($city as $key => $value)
+          {
+            if($key != 0) { $query .= "OR "; }
+            $query .= "LOWER(schools.city) LIKE ".DB::escape("%$value%")." ";
+          }
+          $query .= ") ";
+        }
+        else
+        {
+          $query .= "AND LOWER(schools.city) LIKE ".DB::escape("%".$city[0]."%")." ";
+        }
       }
 
       if(!empty($state))
       {
-        $query .= "AND LOWER(schools.state) LIKE ".DB::escape("%$state%")." ";
+        $state = explode(",", $state);
+        if(count($state) > 1)
+        {
+          $query .= "AND (";
+          foreach($state as $key => $value)
+          {
+            if($key != 0) { $query .= "OR "; }
+            $query .= "LOWER(schools.state) LIKE ".DB::escape("%$value%")." ";
+          }
+          $query .= ") ";
+        }
+        else
+        {
+          $query .= "AND LOWER(schools.state) LIKE ".DB::escape("%".$state[0]."%")." ";
+        }
       }
 
       if(!empty($degree))
       {
-        $query .= "AND LOWER(education.degree) LIKE ".DB::escape("%$degree%")." ";
+        $degree = explode(",", $degree);
+        if(count($degree) > 1)
+        {
+          $query .= "AND (";
+          foreach($degree as $key => $value)
+          {
+            if($key != 0) { $query .= "OR "; }
+            $query .= "LOWER(schools.degree) LIKE ".DB::escape("%$value%")." ";
+          }
+          $query .= ") ";
+        }
+        else
+        {
+          $query .= "AND LOWER(schools.degree) LIKE ".DB::escape("%".$degree[0]."%")." ";
+        }
       }
 
       if(!empty($major))
       {
-        $query .= "AND LOWER(education.major) LIKE ".DB::escape("%$major%")." ";
+        $major = explode(",", $major);
+        if(count($major) > 1)
+        {
+          $query .= "AND (";
+          foreach($major as $key => $value)
+          {
+            if($key != 0) { $query .= "OR "; }
+            $query .= "LOWER(schools.major) LIKE ".DB::escape("%$value%")." ";
+          }
+          $query .= ") ";
+        }
+        else
+        {
+          $query .= "AND LOWER(schools.major) LIKE ".DB::escape("%".$major[0]."%")." ";
+        }
       }
 
       $data['students'] = \DB::query($query)->as_object()->execute();

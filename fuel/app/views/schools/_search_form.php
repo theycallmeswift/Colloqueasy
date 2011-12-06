@@ -5,7 +5,7 @@
 <div class="span16">
   <div class="span7 fleft">
     <div class="clearfix">
-      <?php echo Form::label('Name', 'name'); ?>
+      <?php echo Form::label('School Name', 'name'); ?>
       <div class="input">
         <?php echo Form::input('name', Input::get('name', ''), array('class' => 'xLarge')); ?>
       </div>
