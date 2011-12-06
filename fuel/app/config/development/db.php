@@ -1,15 +1,15 @@
 <?php
 /**
- * The development database settings.
+ * The production database settings.
  */
 
 return array(
   'default' => array(
     'connection'  => array(
-      'host'       => 'localhost',
-      'database'   => 'colloqueasy',
-      'username'   => 'colloqueasy',
-      'password'   => 'cs336',
+      'host'       => $_SERVER['DB1_HOST'],
+      'database'   => $_SERVER['DB1_NAME'],
+      'username'   => $_SERVER['DB1_USER'],
+      'password'   => $_SERVER['DB1_PASS'],
     ),
   ),
 );
