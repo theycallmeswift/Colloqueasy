@@ -5,7 +5,7 @@
       <ul class="nav">
         <li><?php echo Html::anchor("/students", "Students"); ?></li>
         <li><?php echo Html::anchor("/schools", "Schools"); ?></li>
-        <li><?php echo Html::anchor("/employers", "Employers"); ?></li>
+        <li><?php echo Html::anchor("/companies", "Companies"); ?></li>
         <li><?php echo Html::anchor("/interests", "Interests"); ?></li>
       </ul>
       <ul class="nav secondary-nav">

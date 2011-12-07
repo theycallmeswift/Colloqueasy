@@ -1,21 +1,21 @@
 <div class="well">
   <div class="row">
     <div class="span7">
-      <h2 class="first">All Schools</h2>
+      <h2 class="first">All Companies</h2>
     </div>
     <div class="span8">
-      <p>Don't see your school? <?php echo Html::anchor('schools/search', 'Search', array("class" => "btn large primary")); ?> <?php echo Html::anchor('schools/create', 'Add your School', array("class" => "btn large success")); ?></p>
+      <p>Don't see your company? <?php echo Html::anchor('companies/search', 'Search', array("class" => "btn large primary")); ?> <?php echo Html::anchor('companies/create', 'Add your company', array("class" => "btn large success")); ?></p>
     </div>
   </div>
 
-  <?php if ($schools): ?>
-    <?php $schools_displayed = 0; ?>
+  <?php if ($companies): ?>
+    <?php $companies_displayed = 0; ?>
 
     <?php foreach($state_counts as $state_count) { ?>
       <div class="state_count">
         <div class="row title">
           <div class="span12">
-            <h3><?php echo $state_count->state ?> <small>(<?php echo $state_count->count; ?> schools)</small></h3>
+            <h3><?php echo $state_count->state ?> <small>(<?php echo $state_count->count; ?> companies)</small></h3>
           </div>
           <div class="span2" style="margin-top: 5px">
             <span class="label notice">click to show</span>
@@ -29,17 +29,17 @@
             <th>State</th>
           </tr>
 
-          <?php for($i = $schools_displayed; $i < ($schools_displayed + $state_count->count); $i++) { ?>
+          <?php for($i = $companies_displayed; $i < ($companies_displayed + $state_count->count); $i++) { ?>
           <tr>
 
-            <td> <?php echo Html::anchor('schools/view/'.$schools[$i]->id, $schools[$i]->name); ?></td>
-            <td><?php echo $schools[$i]->city; ?></td>
-            <td><?php echo $schools[$i]->state; ?></td>
+            <td> <?php echo Html::anchor('companies/view/'.$companies[$i]->id, $companies[$i]->name); ?></td>
+            <td><?php echo $companies[$i]->city; ?></td>
+            <td><?php echo $companies[$i]->state; ?></td>
           </tr>
           <?php } ?>
         </table>
       </div>
-      <?php $schools_displayed += $state_count->count; ?>
+      <?php $companies_displayed += $state_count->count; ?>
     <?php } ?>
   <?php else: ?>
   <p>No Entries.</p>

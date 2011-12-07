@@ -1,7 +1,7 @@
 <?php
-use Model\School;
+use Model\Company;
 
-class Controller_Schools extends Controller_Base
+class Controller_Companies extends Controller_Base
 {
   public function before($data = null)
   {
@@ -11,10 +11,10 @@ class Controller_Schools extends Controller_Base
 
   public function action_index()
   {
-    $data['schools'] = School::find_all();
-    $data['state_counts'] = \Model\School::schools_by_state_count();
-    $this->template->title = "Schools";
-    $this->template->content = View::forge('schools/index', $data, false);
+    $data['companies'] = Company::find_all();
+    $data['state_counts'] = \Model\Company::companies_by_state_count();
+    $this->template->title = "Companies";
+    $this->template->content = View::forge('companies/index', $data, false);
 
   }
 
@@ -29,17 +29,16 @@ class Controller_Schools extends Controller_Base
       $name = strtolower(Input::get('name', ''));
       $city = strtolower(Input::get('city', ''));
       $state = strtolower(Input::get('state', ''));
-      $degree = strtolower(Input::get('degree', ''));
-      $major = strtolower(Input::get('major', ''));
+      $position = strtolower(Input::get('position', ''));
 
-      $query = "SELECT * FROM schools, education, students ";
+      $query = "SELECT * FROM company, employers, students ";
 
       if($friends_only)
       {
         $query .= "LEFT JOIN friends ON friends.friend_id = students.id ";
       }
 
-      $query .= "WHERE schools.id = education.school_id AND students.id = education.student_id ";
+      $query .= "WHERE company.id = employers.company_id AND students.id = employers.student_id ";
 
       if($friends_only)
       {
@@ -56,13 +55,13 @@ class Controller_Schools extends Controller_Base
           foreach($name as $key => $value)
           {
             if($key != 0) { $query .= "OR "; }
-            $query .= "LOWER(schools.name) LIKE ".DB::escape("%$value%")." ";
+            $query .= "LOWER(company.name) LIKE ".DB::escape("%$value%")." ";
           }
           $query .= ") ";
         }
         else
         {
-          $query .= "AND LOWER(schools.name) LIKE ".DB::escape("%".$name[0]."%")." ";
+          $query .= "AND LOWER(company.name) LIKE ".DB::escape("%".$name[0]."%")." ";
         }
       }
 
@@ -75,13 +74,13 @@ class Controller_Schools extends Controller_Base
           foreach($city as $key => $value)
           {
             if($key != 0) { $query .= "OR "; }
-            $query .= "LOWER(schools.city) LIKE ".DB::escape("%$value%")." ";
+            $query .= "LOWER(company.city) LIKE ".DB::escape("%$value%")." ";
           }
           $query .= ") ";
         }
         else
         {
-          $query .= "AND LOWER(schools.city) LIKE ".DB::escape("%".$city[0]."%")." ";
+          $query .= "AND LOWER(company.city) LIKE ".DB::escape("%".$city[0]."%")." ";
         }
       }
 
@@ -94,67 +93,47 @@ class Controller_Schools extends Controller_Base
           foreach($state as $key => $value)
           {
             if($key != 0) { $query .= "OR "; }
-            $query .= "LOWER(schools.state) LIKE ".DB::escape("%$value%")." ";
+            $query .= "LOWER(company.state) LIKE ".DB::escape("%$value%")." ";
           }
           $query .= ") ";
         }
         else
         {
-          $query .= "AND LOWER(schools.state) LIKE ".DB::escape("%".$state[0]."%")." ";
+          $query .= "AND LOWER(company.state) LIKE ".DB::escape("%".$state[0]."%")." ";
         }
       }
 
-      if(!empty($degree))
+      if(!empty($position))
       {
-        $degree = explode(",", $degree);
-        if(count($degree) > 1)
+        $position = explode(",", $position);
+        if(count($position) > 1)
         {
           $query .= "AND (";
-          foreach($degree as $key => $value)
+          foreach($position as $key => $value)
           {
             if($key != 0) { $query .= "OR "; }
-            $query .= "LOWER(education.degree) LIKE ".DB::escape("%$value%")." ";
+            $query .= "LOWER(employers.position) LIKE ".DB::escape("%$value%")." ";
           }
           $query .= ") ";
         }
         else
         {
-          $query .= "AND LOWER(education.degree) LIKE ".DB::escape("%".$degree[0]."%")." ";
+          $query .= "AND LOWER(employers.position) LIKE ".DB::escape("%".$position[0]."%")." ";
         }
       }
-
-      if(!empty($major))
-      {
-        $major = explode(",", $major);
-        if(count($major) > 1)
-        {
-          $query .= "AND (";
-          foreach($major as $key => $value)
-          {
-            if($key != 0) { $query .= "OR "; }
-            $query .= "LOWER(education.major) LIKE ".DB::escape("%$value%")." ";
-          }
-          $query .= ") ";
-        }
-        else
-        {
-          $query .= "AND LOWER(education.major) LIKE ".DB::escape("%".$major[0]."%")." ";
-        }
-      }
-
-      $data['students'] = \DB::query($query)->as_object()->execute();
+      $data['employees'] = \DB::query($query)->as_object()->execute();
     }
 
-    $this->template->title = "Schools";
-    $this->template->content = View::forge('schools/search', $data, false);
+    $this->template->title = "Companies";
+    $this->template->content = View::forge('companies/search', $data, false);
 
   }
 
   public function action_view($id = null)
   {
-    $data['school'] = School::find_one_by_id($id);
+    $data['company'] = Company::find_one_by_id($id);
 
-    if(!$data['school'])
+    if(!$data['company'])
     {
       throw new HttpNotFoundException;
     }
@@ -163,23 +142,21 @@ class Controller_Schools extends Controller_Base
 
     $val = Validation::forge();
 
-    $val->add('degree', 'Degree')->add_rule('required');
-    $val->add('major', 'Major')->add_rule('required');
+    $val->add('position', 'Position')->add_rule('required');
 
     if ($val->run())
     {
       $start_date = Input::post('start_year', '2000') . "-" . Input::post('start_month', '01') . "-01";
       $end_date = Input::post('end_year', '2000') . "-" . Input::post('end_month', '01') . "-01";
 
-      School::create_education_from_array(array(
-        'school_id' => $data['school']->id,
+      Company::create_employers_from_array(array(
+        'company_id' => $data['company']->id,
         'student_id' => $current_user->id,
         'start_date' => $start_date,
         'end_date' => $end_date,
-        'degree' => Input::post('degree'),
-        'major' => Input::post('major')
+        'position' => Input::post('position'),
       ));
-      Session::set_flash('success', 'Successfully added education!');
+      Session::set_flash('success', 'Successfully added employer!');
     }
     else
     {
@@ -187,12 +164,12 @@ class Controller_Schools extends Controller_Base
       Session::set_flash('error', $errors);
     }
 
-    $data['education'] = School::find_education_for($current_user->id, $data['school']->id);
-    $data['attendees'] = School::get_attendees($data['school']->id);
-    $data['friends'] = School::get_attendees($data['school']->id, $current_user->id);
+    $data['employers'] = Company::find_employers_for($current_user->id, $data['company']->id);
+    $data['employees'] = Company::get_employees($data['company']->id);
+    $data['friends'] = Company::get_employees($data['company']->id, $current_user->id);
 
-    $this->template->title = "School";
-    $this->template->content = View::forge('schools/view', $data, false);
+    $this->template->title = "Company";
+    $this->template->content = View::forge('companies/view', $data, false);
 
   }
 
@@ -205,14 +182,14 @@ class Controller_Schools extends Controller_Base
 
     if ($val->run())
     {
-      $school = School::create_from_array(array(
+      $school = Company::create_from_array(array(
         'name' => Input::post('name'),
         'city' => Input::post('city'),
         'state' => Input::post('state')
       ));
 
-      Session::set_flash('success', 'School was successfully added!');
-      Response::redirect('schools');
+      Session::set_flash('success', 'Company was successfully added!');
+      Response::redirect('companies');
     }
     else
     {
@@ -220,8 +197,8 @@ class Controller_Schools extends Controller_Base
       Session::set_flash('error', $errors);
     }
 
-    $this->template->title = "Schools";
-    $this->template->content = View::forge('schools/create');
+    $this->template->title = "Companies";
+    $this->template->content = View::forge('companies/create');
 
   }
 
