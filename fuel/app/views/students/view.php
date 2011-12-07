@@ -54,7 +54,7 @@
         </div>
         <div class="tab-pane" id="education">
           <?php foreach($schools as $school) { ?>
-          <h4><?php echo Html::anchor("schools/view/$school->id", $school->name); ?> <small><?php echo "$school->city, $school->state"; ?></small></h4>
+            <h4><?php echo Html::anchor("schools/view/$school->id", $school->name); ?> <small><?php echo "$school->city, $school->state"; ?></small></h4>
             <p>Between <span class="label"><?php echo Date::create_from_string($school->start_date, '%Y-%m-%d')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($school->end_date, '%Y-%m-%d')->format("%B, %Y"); ?></span></p>
             <p><?php echo $student->first_name ?> earned a <?php echo $school->degree; ?> in <?php echo $school->major; ?></p>
             <hr />
@@ -62,14 +62,20 @@
         </div>
         <div class="tab-pane" id="work">
           <?php foreach($companies as $company) { ?>
-          <h4><?php echo Html::anchor("companies/view/$company->id", $company->name); ?> <small><?php echo "$company->city, $company->state"; ?></small></h4>
+            <h4><?php echo Html::anchor("companies/view/$company->id", $company->name); ?> <small><?php echo "$company->city, $company->state"; ?></small></h4>
             <p>Between <span class="label"><?php echo Date::create_from_string($company->start_date, '%Y-%m-%d')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($company->end_date, '%Y-%m-%d')->format("%B, %Y"); ?></span></p>
             <p><?php echo $student->first_name ?> worked as an <?php echo $company->position; ?></p>
             <hr />
           <?php } ?>
         </div>
         <div class="tab-pane" id="interests">
-          <p>Sunt qui biodiesel mollit officia, fanny pack put a bird on it thundercats seitan squid ad wolf bicycle rights blog. Et aute readymade farm-to-table carles 8-bit, nesciunt nulla etsy adipisicing organic ea. Master cleanse mollit high life, next level Austin nesciunt american apparel twee mustache adipisicing reprehenderit hoodie portland irony. Aliqua tofu quinoa +1 commodo eiusmod. High life williamsburg cupidatat twee homo leggings. Four loko vinyl DIY consectetur nisi, marfa retro keffiyeh vegan. Fanny pack viral retro consectetur gentrify fap.</p>
+          <?php foreach($interests as $interest) { ?>
+            <div>
+              <h4><?php echo $interest->name; ?></h4>
+              <p><?php echo $interest->description; ?></p>
+              <hr />
+            </div>
+          <?php } ?>
         </div>
       </div>
     </div>
