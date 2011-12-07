@@ -137,7 +137,8 @@ class Controller_Students extends Controller_Base
           'updated_at' => Date::forge()->get_timestamp(),
           'bio' => Input::post('bio'),
 	  'DoB'=>Input::post('DoB'),
-	  'address'=>Input::post('address')
+	  'address'=>Input::post('address'),
+	  'relationship_status'=>Input::post('relationship_status')
         ));
 
         Session::set_flash('success', 'Updated student #' . $id);
@@ -211,7 +212,7 @@ class Controller_Students extends Controller_Base
       Student::add_friendship($current_student->id, $target_student->id);
       Session::set_flash('success', "You are now friends with $target_student->first_name!");
      
-      $message_to_send=array( //creates a message to send to the friendee
+      $message_to_send=array( //creates a message to send to the friend
 	  'sender_id' => $current_student->id,
 	  'receiver_id' => $target_student->id,
 	  'subject'=> "You've received a new friend",

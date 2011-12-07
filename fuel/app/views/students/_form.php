@@ -35,7 +35,12 @@
   	<?php echo Form::label('Address:', 'address'); ?>
 	<?php echo Form::input('address', Input::post('address', isset($student) ? $student->address : '')); ?>
   </p>
-  <div class="actions">
+  
+  <p>
+  	<?php echo Form::label('Relationship Status', 'relationship_status'); ?>
+	<?php echo Form::input('relationship_status', Input::post('relationship_status', isset($student) ? $student->relationship_status : '')); ?>
+  </p>
+<div class="actions">
     <?php echo Form::submit(); ?>
  </div>
 

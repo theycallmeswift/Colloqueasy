@@ -1,3 +1,14 @@
+<script type="text/javascript">
+
+function getRelationshipType(studentID)
+{
+	var type=prompt("What type of relationship are you in with this person?");
+	
+	
+
+</script>
+
+
 <div class="row profile">
   <div class="span5 sidebar">
     <div class="well media-grid">
@@ -38,9 +49,11 @@
         <div class="tab-pane active" id="overview">
           <ul class="unstyled">
             <li><strong>Gender:</strong> <?php echo $student->gender; ?></li>
-            <?php foreach($relationships as $relationship) { ?>
-              <li><strong>In a Relationship with:</strong> <?php echo Html::anchor("students/view/$relationship->acceptor_id", "$relationship->first_name $relationship->last_name"); ?></li>
+	    <?php $in_relationship=false; ?>
+            <?php foreach($relationships as $relationship) {$in_relationship=true; ?>
+              <li><strong><?php echo $student->relationship_status ?> with:</strong> <?php echo Html::anchor("students/view/$relationship->acceptor_id", "$relationship->first_name $relationship->last_name"); ?></li>
             <?php } ?>
+	    <?php if($in_relationship==false){ echo $student->relationship_status; } ?>
           </ul>
 	  
 	  <strong>Date of Birth:</strong>
