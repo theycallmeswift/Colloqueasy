@@ -1,13 +1,3 @@
-<script type="text/javascript">
-
-function getRelationshipType(studentID)
-{
-	var type=prompt("What type of relationship are you in with this person?");
-	
-	
-
-</script>
-
 
 <div class="row profile">
   <div class="span5 sidebar">
