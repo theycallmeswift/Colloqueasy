@@ -42,6 +42,7 @@ class Controller_Students extends Controller_Base
     $data['friends'] = Student::get_friends($id);
     $data['relationships'] = Student::get_relationships($id);
     $data['schools'] = \Model\School::find_education_for($id);
+    $data['companies'] = \Model\Company::find_employers_for($id);
 
     $this->template->title = "Student";
     $this->template->content = View::forge('students/view', $data, false);

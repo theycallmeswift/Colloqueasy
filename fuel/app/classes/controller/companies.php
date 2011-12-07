@@ -22,7 +22,7 @@ class Controller_Companies extends Controller_Base
   {
     $data = array();
 
-    $data['students'] = array();
+    $data['employees'] = array();
     if (Input::get('submit', false))
     {
       $friends_only = (Input::get('friends_only', false) === '1') ? true : false;

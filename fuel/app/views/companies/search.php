@@ -15,7 +15,7 @@
           </a>
         </div>
         <div class="span5 fleft">
-          <h4><?php echo "$employee->first_name $employee->last_name"; ?> <small><?php echo "$employee->position"; ?></small></h4>
+          <h4><?php echo Html::anchor("students/view/$employee->id", "$employee->first_name $employee->last_name"); ?> <small><?php echo "$employee->position"; ?></small></h4>
           <p><span class="label"><?php echo Date::create_from_string($employee->start_date, '%Y-%m-%d')->format("%B, %Y"); ?></span> to <span class='label'> <?php echo Date::create_from_string($employee->end_date, '%Y-%m-%d')->format("%B, %Y"); ?></span></p>
           <p><?php echo "$employee->name"; ?></p>
         </div>

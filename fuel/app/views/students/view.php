@@ -61,7 +61,12 @@
           <?php } ?>
         </div>
         <div class="tab-pane" id="work">
-          <p>Banksy do proident, brooklyn photo booth delectus sunt artisan sed organic exercitation eiusmod four loko. Quis tattooed iphone esse aliqua. Master cleanse vero fixie mcsweeney's. Ethical portland aute, irony food truck pitchfork lomo eu anim. Aesthetic blog DIY, ethical beard leggings tofu consequat whatever cardigan nostrud. Helvetica you probably haven't heard of them carles, marfa veniam occaecat lomo before they sold out in shoreditch scenester sustainable thundercats. Consectetur tofu craft beer, mollit brunch fap echo park pitchfork mustache dolor.</p>
+          <?php foreach($companies as $company) { ?>
+          <h4><?php echo Html::anchor("companies/view/$company->id", $company->name); ?> <small><?php echo "$company->city, $company->state"; ?></small></h4>
+            <p>Between <span class="label"><?php echo Date::create_from_string($company->start_date, '%Y-%m-%d')->format("%B, %Y"); ?></span> and <span class='label'> <?php echo Date::create_from_string($company->end_date, '%Y-%m-%d')->format("%B, %Y"); ?></span></p>
+            <p><?php echo $student->first_name ?> worked as an <?php echo $company->position; ?></p>
+            <hr />
+          <?php } ?>
         </div>
         <div class="tab-pane" id="interests">
           <p>Sunt qui biodiesel mollit officia, fanny pack put a bird on it thundercats seitan squid ad wolf bicycle rights blog. Et aute readymade farm-to-table carles 8-bit, nesciunt nulla etsy adipisicing organic ea. Master cleanse mollit high life, next level Austin nesciunt american apparel twee mustache adipisicing reprehenderit hoodie portland irony. Aliqua tofu quinoa +1 commodo eiusmod. High life williamsburg cupidatat twee homo leggings. Four loko vinyl DIY consectetur nisi, marfa retro keffiyeh vegan. Fanny pack viral retro consectetur gentrify fap.</p>
