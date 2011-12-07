@@ -136,6 +136,8 @@ class Controller_Students extends Controller_Base
           'gender' => Input::post('gender'),
           'updated_at' => Date::forge()->get_timestamp(),
           'bio' => Input::post('bio'),
+	  'DoB'=>Input::post('DoB'),
+	  'address'=>Input::post('address')
         ));
 
         Session::set_flash('success', 'Updated student #' . $id);

@@ -25,6 +25,16 @@
     <?php echo Form::label('Bio', 'bio'); ?>
     <?php echo Form::textarea('bio', Input::post('bio', isset($bio) ? $bio: '')); ?>
   </p>
+  
+  <p>
+  	<?php echo Form::label('Date Of Birth:', 'DoB'); ?>
+	<?php echo Form::input('DoB', Input::post('DoB', isset($student) ? $student->DoB : '')); ?>
+  </p>
+
+  <p>
+  	<?php echo Form::label('Address:', 'address'); ?>
+	<?php echo Form::input('address', Input::post('address', isset($student) ? $student->address : '')); ?>
+  </p>
   <div class="actions">
     <?php echo Form::submit(); ?>
  </div>

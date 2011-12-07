@@ -42,6 +42,13 @@
               <li><strong>In a Relationship with:</strong> <?php echo Html::anchor("students/view/$relationship->acceptor_id", "$relationship->first_name $relationship->last_name"); ?></li>
             <?php } ?>
           </ul>
+	  
+	  <strong>Date of Birth:</strong>
+	  <p><?php echo $student->DoB ?></p>
+	  
+	  <strong>Address:</strong>
+	  <p><?php echo $student->address ?></p>
+	  
           <strong>Bio:</strong>
           <p><?php echo $student->bio ?></p>
 
