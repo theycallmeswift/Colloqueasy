@@ -210,6 +210,18 @@ class Controller_Students extends Controller_Base
     {
       Student::add_friendship($current_student->id, $target_student->id);
       Session::set_flash('success', "You are now friends with $target_student->first_name!");
+     
+      $message_to_send=array( //creates a message to send to the friendee
+	  'sender_id' => $current_student->id,
+	  'receiver_id' => $target_student->id,
+	  'subject'=> "You've received a new friend",
+	  'date' => Date::forge()->get_timestamp(),
+	  'has_read' => 0,
+	  'body' => "You've made a new friend! " . $current_student->first_name . " " . $current_student->last_name . " has added you as a friend.  To return the favor go to <a href=\"http://colloqueasy.com/view/"
+	  . $current_student->id . "\">" . $current_student->first_name ."'s profile</a>");
+	  
+      Model\message::create_from_array($message_to_send);
+      
     }
     else
     {
@@ -217,6 +229,8 @@ class Controller_Students extends Controller_Base
     }
     Response::redirect('students');
   }
+  
+
 
   /**
    * Remove Friend Action

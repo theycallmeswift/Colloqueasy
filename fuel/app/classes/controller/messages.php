@@ -112,5 +112,5 @@ class Controller_Messages extends Controller_Base {
     Response::redirect('messages');
   }
 
-
+  
 }
