@@ -3,7 +3,7 @@
 
       <div id="my-tab-content" class="tab-content">
         <div class="tab-pane active" id="basic">
-          <?php echo render('students/_form'); ?>
+          <?php echo render('students/_edit_form'); ?>
         </div>
       </div>
 </div>

@@ -36,8 +36,16 @@ class Controller_Students extends Controller_Base
     }
 
     $current_student = self::current_user();
-    $data['are_friends'] = Student::are_friends($current_student->id, $data['student']->id);
-    $data['are_in_relationship'] = Student::are_in_relationship($current_student->id, $data['student']->id);
+    if(self::is_logged_in())
+    {
+      $data['are_friends'] = Student::are_friends($current_student->id, $data['student']->id);
+      $data['are_in_relationship'] = Student::are_in_relationship($current_student->id, $data['student']->id);
+    }
+    else
+    {
+      $data['are_friends'] = false;
+      $data['are_in_relationship'] = false;
+    }
 
     $data['friends'] = Student::get_friends($id);
     $data['relationships'] = Student::get_relationships($id);
