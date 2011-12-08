@@ -223,8 +223,9 @@ class Student
   {
 	  $id=\DB::escape($id);
 	  
-	  return \DB::query("Select * FROM friends F WHERE F.friend_id = " . $id . " AND NOT EXISTS 
-	  (SELECT * FROM friends F1 WHERE F1.friend_id = F.student_id and F1.student_id = " . $id .")" )->as_object()->execute();
+	  return \DB::query("SELECT * FROM students S WHERE S.id IN  (Select F.student_id FROM friends F WHERE F.friend_id = " . $id . " AND NOT EXISTS 
+	  (SELECT * FROM friends F1 WHERE F1.friend_id = F.student_id and F1.student_id = " . $id ."))" )->as_object()->execute();
+	  //this only gives you friend ids and student ids
   }
   
 

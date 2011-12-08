@@ -1,4 +1,3 @@
-
 <div class="row profile">
   <div class="span5 sidebar">
     <div class="well media-grid">
@@ -33,6 +32,7 @@
         <li class=""><a href="#education">Eduction</a></li>
         <li class=""><a href="#work">Work</a></li>
         <li class=""><a href="#interests">Interests</a></li>
+	<li class=""><a href="#pending_friends">Pending Friends</a></li>
       </ul>
 
       <div id="my-tab-content" class="tab-content">
@@ -87,6 +87,12 @@
             </div>
           <?php } ?>
         </div>
+	<div class="tab-pane" id="pending_friends">
+	  <div class="media-grid">
+            <?php foreach($pending_friends as $friend) { ?>
+              <?php echo Html::anchor("/students/view/$friend->id", "<img class='thumbnail' src='http://www.gravatar.com/avatar/". md5(strtolower($friend->email))."?s=40' />"); ?>
+            <?php } ?>
+	</div>
       </div>
     </div>
   </div>
