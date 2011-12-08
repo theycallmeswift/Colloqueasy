@@ -211,6 +211,22 @@ class Student
 
     return \DB::query("DELETE FROM `friends` WHERE `student_id` = $id AND `friend_id` = $friend_id LIMIT 1")->execute();
   }
+  
+  /**
+  * find_pending_friends()
+  *
+  * Finds all people who have friended the user but the user has not friended
+  *
+  *
+  **/
+  public static function find_pending_friends($id = 0)
+  {
+	  $id=\DB::escape($id);
+	  
+	  return \DB::query("Select * FROM friends F WHERE F.friend_id = " . $id . " AND NOT EXISTS 
+	  (SELECT * FROM friends F1 WHERE F1.friend_id = F.student_id and F1.student_id = " . $id .")" )->as_object()->execute();
+  }
+  
 
   /**
    * are_in_relationship()
