@@ -227,7 +227,7 @@ class Controller_Students extends Controller_Base
 	  'subject'=> "You've received a new friend",
 	  'date' => Date::forge()->get_timestamp(),
 	  'has_read' => 0,
-	  'body' => "You've made a new friend! " . $current_student->first_name . " " . $current_student->last_name . " has added you as a friend.  To return the favor go to <a href=\"http://colloqueasy.com/view/"
+	  'body' => "You've made a new friend! " . $current_student->first_name . " " . $current_student->last_name . " has added you as a friend.  To return the favor go to <a href=\"http://colloqueasy.com/students/view/"
 	  . $current_student->id . "\">" . $current_student->first_name ."'s profile</a>");
 	  
       Model\message::create_from_array($message_to_send);
